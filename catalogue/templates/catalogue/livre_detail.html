@@ -1,0 +1,54 @@
+{% extends 'catalogue/public_base.html' %}
+{% block title %}{{ livre.titre }} - Ma Bibliothèque{% endblock %}
+{% block content %}
+<div class="card">
+<div style="display: grid; grid-template-columns: 1fr 2fr; gap: 3rem;">
+<!-- Image -->
+<div>
+{% if livre.couverture %}
+<img src="{{ livre.couverture.url }}" alt="{{ livre.titre }}"
+style="width: 100%; border-radius: 15px; box-shadow: 0
+10px 30px rgba(0,0,0,0.3);">
+{% else %}
+
+<div style="width: 100%; aspect-ratio: 2/3; background:
+linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+border-radius: 15px; display: flex; align-items:
+center; justify-content: center;
+color: white; font-size: 5rem;">
+📖
+</div>
+{% endif %}
+</div>
+<!-- Informations -->
+<div>
+<h1 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--
+dark);">{{ livre.titre }}</h1>
+<p style="font-size: 1.3rem; color: #7f8c8d; margin-bottom:
+2rem;">par {{ livre.auteur }}</p>
+<div style="background: #f8f9fa; padding: 1.5rem; border-radius:
+10px; margin-bottom: 2rem;">
+<strong>📄 Pages:</strong><br>
+{{ livre.nombre_pages }}
+</div>
+<div>
+<strong>📅 Publication:</strong><br>
+{{ livre.date_publication|date:"d F Y" }}
+</div>
+<div>
+<strong>➕ Ajouté le:</strong><br>
+{{ livre.date_ajout|date:"d F Y" }}
+</div>
+</div>
+</div>
+<h3 style="margin-bottom: 1rem;">📖 Résumé</h3>
+<p style="line-height: 1.8; text-align: justify; color:
+#2c3e50;">{{ livre.resume }}</p>
+</div>
+</div>
+</div>
+
+<div style="text-align: center; margin: 2rem 0;">
+<a href="{% url 'catalogue' %}" class="btn">← Retour au catalogue</a>
+</div>
+{% endblock %}

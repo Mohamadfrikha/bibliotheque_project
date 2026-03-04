@@ -1,0 +1,108 @@
+{% extends 'catalogue/public_base.html' %}
+
+{% block title %}Recherche{% endblock %}
+{% block content %}
+<div class="container my-4">
+
+<h2>Recherche avancée</h2>
+<!-- Formulaire de recherche -->
+<form method="get" action="" class="mb-4">
+<div class="row g-2">
+<div class="col-md-6">
+<input
+type="text"
+name="q"
+value="{{ query }}"
+class="form-control"
+placeholder="Titre, auteur, résumé..."
+>
+</div>
+<div class="col-md-4">
+<select name="categorie" class="form-select">
+<option value="">Toutes les catégories</option>
+{% for categorie in categories %}
+<option value="{{ categorie.id }}"
+{% if categorie_id == categorie.id|stringformat:"s" %}
+selected
+{% endif %}
+>
+{{ categorie.nom }}
+</option>
+{% endfor %}
+</select>
+</div>
+<div class="col-md-2">
+
+<button type="submit" class="btn btn-primary w-
+100">Rechercher</button>
+
+</div>
+</div>
+</form>
+<!-- Résultats -->
+{% if query or categorie_id %}
+<p class="text-muted">{{ total_resultats }} résultat{{total_resultats|pluralize }} trouvé{{ total_resultats|pluralize }}</p>
+{% endif %}
+{% if suggestions %}
+<!-- Suggestions si aucun résultat -->
+<div class="alert alert-warning">
+<strong>Aucun résultat exact.</strong> Vous cherchiez peut-être :
+<ul class="mb-0 mt-2">
+{% for livre in suggestions %}
+<li><a href="{% url 'detail_livre' livre.pk %}">{{ livre.titre}}</a></li>
+{% endfor %}
+</ul>
+
+</div>
+{% elif page_obj %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+{% for livre in page_obj %}
+<div class="col">
+<div class="card h-100">
+{% if livre.couverture %}
+<img src="{{ livre.couverture.url }}" class="card-img-top" alt="{{ livre.titre }}">
+{% endif %}
+<div class="card-body">
+<h5 class="card-title">{{ livre.titre }}</h5>
+<p class="card-text text-muted">{{ livre.auteur }}</p>
+{% if livre.categorie %}
+<span class="badge bg-secondary">{{ livre.categorie }}</span>
+{% endif %}
+<p class="card-text mt-2">{{ livre.resume|truncatewords:20
+}}</p>
+</div>
+<div class="card-footer">
+<a href="{% url 'livre_detail' livre.pk %}" class="btn btn-sm btn-outline-primary">Voir le livre</a>
+</div>
+</div>
+</div>
+{% endfor %}
+</div>
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<nav class="mt-4">
+<ul class="pagination justify-content-center">
+{% if page_obj.has_previous %}
+<li class="page-item">
+<a class="page-link" href="?q={{ query }}&categorie={{categorie_id }}&page={{ page_obj.previous_page_number }}">Précédent</a>
+</li>
+{% endif %}
+{% for num in page_obj.paginator.page_range %}
+<li class="page-item {% if page_obj.number == num %}active{% endif%}">
+<a class="page-link" href="?q={{ query }}&categorie={{categorie_id }}&page={{ num }}">{{ num }}</a>
+</li>
+{% endfor %}
+{% if page_obj.has_next %}
+
+<li class="page-item">
+<a class="page-link" href="?q={{ query }}&categorie={{categorie_id }}&page={{ page_obj.next_page_number }}">Suivant</a>
+</li>
+{% endif %}
+</ul>
+</nav>
+{% endif %}
+{% else %}
+<p class="text-muted">Utilisez le formulaire ci-dessus pour lancer une recherche.</p>
+{% endif %}
+</div>
+{% endblock %}

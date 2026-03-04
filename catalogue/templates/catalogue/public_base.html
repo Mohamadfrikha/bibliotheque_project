@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Ma Bibliothèque{% endblock %}</title>
+<link rel="stylesheet" href="{% static 'catalogue/css/style.css' %}">
+</head>
+<body>
+<header>
+<div class="container">
+<div class="logo">📚 Ma Bibliothèque</div>
+<nav>
+<ul>
+<li><a href="{% url 'accueil' %}">Accueil</a></li>
+<li><a href="{% url 'catalogue' %}">Catalogue</a></li>
+<li> <a href="{% url 'recherche' %}">Recherche avencée</a></li>
+<li><a href="/admin/">Admin</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<div class="container">
+{% block content %}{% endblock %}
+</div>
+
+<footer style="background: rgba(44, 62, 80, 0.95); color: white; text-
+align: center; padding: 2rem; margin-top: 4rem;">
+
+<p>&copy; 2025 Ma Bibliothèque</p>
+</footer>
+</body>
+</html>

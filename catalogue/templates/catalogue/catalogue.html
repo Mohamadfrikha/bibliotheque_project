@@ -1,0 +1,74 @@
+{% extends 'catalogue/public_base.html' %}
+{% block title %}Catalogue - Ma Bibliothèque{% endblock %}
+{% block content %}
+<div class="card">
+<div style="display: flex; justify-content: space-between; align-items:
+center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+<h1>Notre Catalogue</h1>
+<!-- Options de tri -->
+<div style="display: flex; gap: 1rem; align-items: center;">
+<label for="sort">Trier par:</label>
+<select id="sort" onchange="window.location.href='?sort=' +this.value + '&vue={{ vue }}'" style="padding: 0.5rem; border-radius: 5px; border: 1px solid #ddd;">
+<option value="recent" {% if sort_by == 'recent' %}selected{% endif %}>Plus récents</option>
+<option value="ancien" {% if sort_by == 'ancien' %}selected{%endif %}>Plus anciens</option>
+<option value="titre" {% if sort_by == 'titre' %}selected{%endif %}>Titre (A-Z)</option>
+<option value="auteur" {% if sort_by == 'auteur' %}selected{%endif %}>Auteur (A-Z)</option>
+<option value="pages_asc" {% if sort_by == 'pages_asc'%}selected{% endif %}>Pages (↑)</option>
+<option value="pages_desc" {% if sort_by == 'pages_desc'%}selected{% endif %}>Pages (↓)</option>
+</select>
+
+<p style="color: #7f8c8d; margin-bottom: 2rem;">{{page_obj.paginator.count }} livre(s) trouvé(s)</p>
+<!-- Vue en grille -->
+<div class="livre-grid">
+{% for livre in page_obj %}
+<div class="livre-card">
+{% if livre.couverture %}
+
+<img src="{{ livre.couverture.url }}" alt="{{livre.titre }}">
+{% else %}
+<div style="width: 100%; height: 350px; background:
+linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+display: flex; align-items: center;
+justify-content: center; color: white; font-size: 3rem;">
+📖
+</div>
+{% endif %}
+<div class="livre-card-content">
+<h3>{{ livre.titre }}</h3>
+<div class="meta">
+{{ livre.auteur }}<br>
+<span class="badge" style="margin-top: 0.5rem;">
+{{ livre.categorie.nom|default:"Non classé" }}
+</span>
+<br>
+{{ livre.nombre_pages }} pages
+<a href="{% url 'livre_detail' livre.pk %}" class="btn
+
+btn-full">Voir détails</a>
+</div>
+</div>
+</div>
+{% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if  page_obj.has_other_pages %}
+<div class="pagination">
+{% if page_obj.has_previous %}
+<a href="?page=1&sort={{ sort_by }}&vue={{ vue }}">«Première</a>
+<a href="?page={{ page_obj.previous_page_number }}&sort={{
+sort_by }}&vue={{ vue }}">‹ Précédente</a>
+{% endif %}
+<span class="current">Page {{ page_obj.number }} / {{
+page_obj.paginator.num_pages }}</span>
+{% if page_obj.has_next %}
+<a href="?page={{ page_obj.next_page_number }}&sort={{ sort_by
+}}&vue={{ vue }}">Suivante ›</a>
+<a href="?page={{ page_obj.paginator.num_pages }}&sort={{
+sort_by }}&vue={{ vue }}">Dernière »</a>
+{% endif %}
+</div>
+{% endif %}
+</div>
+
+{% endblock %}

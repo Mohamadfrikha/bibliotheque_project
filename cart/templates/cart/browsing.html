@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Catalogue de Livres</title>
+    <style>
+      .product-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        list-style: none;
+        padding: 0;
+      }
+      .product-item {
+        flex: 1;
+        max-width: 30%;
+        margin: 10px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+      }
+      .addToCart-button {
+        display: block;
+        margin-top: 10px;
+        background-color: rgb(255, 115, 0);
+
+        color: #fff;
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+      .prix-barre {
+        text-decoration: line-through;
+        color: #999;
+        font-size: 0.9em;
+      }
+      .prix-remise {
+        color: red;
+        font-weight: bold;
+      }
+      .badge-remise {
+        background-color: red;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.8em;
+      }
+      .no-price {
+        color: gray;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Catalogue de Livres</h1>
+    <ul class="product-list">
+      {% for livre in livres %}
+      <li class="product-item">
+        <img
+          src="{{ livre.couverture.url }}"
+          alt="{{ livre.titre }}"
+          width="200"
+          height="150"
+        />
+        <h2>{{ livre.titre }}</h2>
+        <p>{{ livre.previewDescription|slice:":30" }}</p>
+        <!-- Prix -->
+        {% if livre.pricing %} {% if livre.pricing.is_on_sale %}
+        <p>
+          <span class="prix-barre">{{ livre.pricing.base_price }} TND</span>
+
+          <span class="prix-remise">{{ livre.pricing.final_price }} TND</span>
+          <span class="badge-remise"
+            >-{{ livre.pricing.discount_percent }}%</span
+          >
+        </p>
+        {% else %}
+        <p>Prix : {{ livre.pricing.base_price }} TND</p>
+        {% endif %}
+        <a
+          class="addToCart-button"
+          href="{% url 'cart:add_to_cart' livre.id %}">Ajouter au panier</a
+        >
+        {% else %}
+        <p class="no-price">Prix non disponible</p>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

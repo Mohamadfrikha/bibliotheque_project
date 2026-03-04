@@ -1,0 +1,168 @@
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panier</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+      .product-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        list-style: none;
+        padding: 0;
+      }
+      .product-item {
+        flex: 1;
+        margin: 10px;
+
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+      }
+      .buy-now-button {
+        display: block;
+        margin-top: 10px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+      .changeQty-button {
+        margin-top: 10px;
+        background-color: rgb(255, 115, 0);
+        color: #fff;
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+      .messages {
+        color: rgb(243, 18, 18);
+        font-weight: bold;
+      }
+      .prix-barre {
+        text-decoration: line-through;
+        color: #999;
+        font-size: 0.9em;
+      }
+      .prix-remise {
+        color: red;
+        font-weight: bold;
+      }
+      .badge-remise {
+        background-color: red;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.8em;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Votre Panier</h1>
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %} {% if forloop.last %}
+      <p class="{{ message.tags }}">{{ message }}</p>
+      {% endif %} {% endfor %}
+    </div>
+    {% endif %}
+    <div class="product-list">
+      {% for item in cart_items %}
+      <div class="product-item">
+        <!-- Image du livre -->
+        <p>
+          <img
+            src="{{ item.livre.couverture.url }}"
+            width="70"
+            height="70"
+            alt="couverture"
+          />
+        </p>
+        <!-- Titre + quantité -->
+        <p>
+          {{ item.livre.titre }}
+          <a
+            class="changeQty-button"
+            href="{% url 'cart:sub_qty'
+item.livre.id %}"
+            >-</a
+          >
+          ({{ item.quantity }})
+          <a
+            class="changeQty-button"
+            href="{% url 'cart:add_qty'
+item.livre.id %}"
+            >+</a
+          >
+        </p>
+        <!-- Prix avec remise si applicable -->
+        <p>
+          {% if item.livre.pricing.is_on_sale %}
+          <span class="prix-barre"
+            >{{ item.livre.pricing.base_price }} TND</span
+          >
+          <span class="prix-remise"
+            >{{ item.livre.pricing.final_price }} TND</span
+          >
+          <span class="badge-remise"
+            >-{{ item.livre.pricing.discount_percent }}%</span
+          >
+          {% else %} Prix: {{ item.unit_price }} TND {% endif %}
+        </p>
+        <!-- Sous-total -->
+
+        <p>Sous-total: <strong>{{ item.subtotal }} TND</strong></p>
+        <a
+          href="{% url 'cart:remove_from_cart' item.id %}"
+          class="btn btn-danger"
+          >Supprimer</a
+        >
+      </div>
+      {% empty %}
+      <p>Votre panier est vide.</p>
+      {% endfor %}
+    </div>
+    <p><strong>Total : {{ total_price }} TND</strong></p>
+    <a href="{% url 'cart:product_list' %}" class="btn btn-primary"
+      >Continuer la navigation</a
+    >OR <button id="checkout-button" class="btn btn-success">Checkout</button>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const stripe = Stripe(
+          "pk_test_51T6SO9CA4xZUUkJO6FR6szpg0n6O9KhSnNl2Gxbxb55DoYHgSiCXd9TvaLxU5ewOySu3FdnuYAmjjjsTOhtUKZVx00WWZWTFwz",
+        );
+
+        const checkoutButton = document.getElementById("checkout-button");
+        checkoutButton.addEventListener("click", async () => {
+          try {
+            const response = await fetch("/payments/create-checkout-session/", {
+              method: "GET",
+            });
+            if (!response.ok) {
+              const text = await response.text();
+              console.error("Erreur serveur:", text);
+              alert("Erreur serveur, vérifiez la console.");
+              return;
+            }
+            const data = await response.json();
+            if (data.error) {
+              alert("Erreur: " + data.error);
+              return;
+            }
+            stripe.redirectToCheckout({ sessionId: data.id });
+          } catch (error) {
+            console.error("Erreur:", error);
+            alert("Une erreur est survenue.");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

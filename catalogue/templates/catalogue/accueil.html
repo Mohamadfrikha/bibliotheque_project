@@ -1,0 +1,85 @@
+{% extends 'catalogue/public_base.html' %} {% block title %}Accueil - Ma
+Bibliothèque{% endblock %} {% block content %}
+<!-- Hero Section -->
+<div
+  class="card"
+  style="
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+    padding: 4rem 2rem;
+  "
+>
+  <h1 style="font-size: 3rem; margin-bottom: 1rem">
+    Bienvenue dans votre bibliothèque
+  </h1>
+  <p style="font-size: 1.3rem; opacity: 0.95">
+    Découvrez notre collection de {{ stats.total_livres }} livres
+  </p>
+</div>
+<!-- Statistiques -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <span class="number">{{ stats.total_livres }}</span>
+    <span class="label">Livres</span>
+  </div>
+  <div class="stat-card">
+    <span class="number">{{ stats.total_categories }}</span>
+    <span class="label">Catégories</span>
+  </div>
+  <div class="stat-card">
+    <span class="number">{{ stats.total_pages|floatformat:0 }}</span>
+    <span class="label">Pages au total</span>
+  </div>
+</div>
+<!-- Catégories -->
+<div class="card">
+  <h2 style="margin-bottom: 1.5rem">📂 Explorer par catégorie</h2>
+  <div style="display: flex; flex-wrap: wrap; gap: 1rem">
+    {% for categorie in categories %}
+    <a href="#" class="badge" style="font-size: 1rem; padding: 0.7rem 1.5rem">
+      {{ categorie.nom }} ({{ categorie.nb_livres }})
+    </a>
+    {% endfor %}
+  </div>
+</div>
+<!-- Nouveautés -->
+<div class="card">
+  <h2 style="margin-bottom: 1.5rem">🆕 Derniers ajouts</h2>
+  <div class="livre-grid">
+    {% for livre in nouveautes %}
+    <div class="livre-card">
+      {% if livre.couverture %}
+      <img
+        src="{{ livre.couverture.url }}"
+        alt="{{ livre.titre
+    }}"
+      />
+      {% else %}
+      <div
+        style="width: 100%; height: 350px; background:
+    linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+    display: flex; align-items: center; justify-
+    content: center; color: white; font-size: 3rem;"
+      >
+        📖
+      </div>
+      {% endif %}
+      <div class="livre-card-content">
+        <h3>{{ livre.titre }}</h3>
+        <div class="meta">
+          {{ livre.auteur }}<br />
+
+          <span class="badge" style="margin-top: 0.5rem">
+            {{ livre.categorie.nom|default:"Non classé" }}
+          </span>
+        </div>
+        <p class="resume">{{ livre.resume }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
