@@ -1,5 +1,5 @@
 from django.db import models
 
 # Create your models here.
-# class Payment(models.Model):
+# class Payment(models.Model): fdsf
 #     amount = models.DecimalField(max_digits=10, decimal_places=2)
