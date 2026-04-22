@@ -130,3 +130,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'couvertures')
 
 STRIPE_SECRET_KEY ="sk_test_51T6SO9CA4xZUUkJONvXVjaGx1XMZZCgOudkWoahWNrgl1ci9oPIKgeYUKf88hXjGTqPEt6wOzBAWu6kkYb1OllYJ00i8kcfUnK"
 STRIPE_PUBLISHABLE_KEY ="pk_test_51T6SO9CA4xZUUkJO6FR6szpg0n6O9KhSnNl2Gxbxb55DoYHgSiCXd9TvaLxU5ewOySu3FdnuYAmjjjsTOhtUKZVx00WWZWTFwz"
+
+
+LOGIN_URL = 'cart:login'
+LOGIN_REDIRECT_URL = 'cart:product_list'
+LOGOUT_REDIRECT_URL = 'cart:login'

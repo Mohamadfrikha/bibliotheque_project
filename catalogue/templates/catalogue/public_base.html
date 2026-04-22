@@ -16,6 +16,16 @@
 <li><a href="{% url 'accueil' %}">Accueil</a></li>
 <li><a href="{% url 'catalogue' %}">Catalogue</a></li>
 <li> <a href="{% url 'recherche' %}">Recherche avencée</a></li>
+<li>
+{% if user.is_authenticated %}
+Bonjour, <strong>{{ user.username }}</strong> |
+<a href="{% url 'cart:view_cart' %}">Mon panier</a> |
+<a href="{% url 'cart:logout' %}">Se déconnecter</a>
+{% else %}
+<a href="{% url 'cart:login' %}">Se connecter</a> |
+<a href="{% url 'cart:register' %}">S'inscrire</a>
+{% endif %}
+</li>
 <li><a href="/admin/">Admin</a></li>
 </ul>
 </nav>
