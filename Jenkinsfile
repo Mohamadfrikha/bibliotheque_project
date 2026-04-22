@@ -18,14 +18,14 @@ pipeline {
         stage('Checkout GitHub') { 
             steps { 
                 script { 
-                    def branchName = env.BRANCH_NAME ?: 'master' 
+                    def branchName = env.BRANCH_NAME ?: 'main' 
                     echo "Branche détectée : ${branchName}" 
  
                     checkout([ 
                         $class: 'GitSCM', 
                         branches: [[name: "*/${branchName}"]], 
                         userRemoteConfigs: [[ 
-                            url: 'https://github.com/espace2021/projcicd' 
+                            url: 'https://github.com/Mohamadfrikha/bibliotheque_project' 
                         ]] 
                     ]) 
                 } 
