@@ -44,6 +44,9 @@ pipeline {
                                 "-Dsonar.login=%TOKEN% " + 
                                 "-Dsonar.projectVersion=1.0.0 " + 
                                 "-Dsonar.sourceEncoding=UTF-8" 
+
+                                "-Dsonar.coverage.exclusions=**/settings.py,**/migrations/** " +
+                                "-Dsonar.exclusions=**/settings.py "
                         } 
                     } 
                 } 
