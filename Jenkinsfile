@@ -32,6 +32,13 @@ pipeline {
             } 
         } 
  
+        stage('Run Tests + Coverage') {
+            steps {
+                bat "coverage run manage.py test"
+                bat "coverage xml -o coverage.xml"
+                bat "dir coverage.xml"
+            }
+        }
         stage('Analyse SonarQube') { 
         steps { 
             script { 
@@ -44,7 +51,7 @@ pipeline {
                             "-Dsonar.login=%TOKEN% " +
                             "-Dsonar.projectVersion=1.0.0 " +
                             "-Dsonar.sourceEncoding=UTF-8 " +
-                            "-Dsonar.python.coverage.reportPaths=coverage.xml " +
+                            "-Dsonar.python.coverage.reportPaths=${WORKSPACE}\\coverage.xml " +
                             "-Dsonar.coverage.exclusions=**/settings.py,**/migrations/** " +
                             "-Dsonar.exclusions=**/settings.py"
                     } 
