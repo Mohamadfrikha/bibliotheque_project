@@ -33,24 +33,24 @@ pipeline {
         } 
  
         stage('Analyse SonarQube') { 
-            steps { 
-                script { 
-                    def scannerHome = tool 'MySonarScanner' 
-                    withSonarQubeEnv('projet') { 
-                        withCredentials([string(credentialsId: 'sonarqube', variable: 'TOKEN')]) { 
-                            bat "\"${scannerHome}\\bin\\sonar-scanner.bat\" " + 
-                                "-Dsonar.projectKey=node-projetcid " + 
-                                "-Dsonar.sources=. " + 
-                                "-Dsonar.login=%TOKEN% " + 
-                                "-Dsonar.projectVersion=1.0.0 " + 
-                                "-Dsonar.sourceEncoding=UTF-8" 
-
-                                "-Dsonar.coverage.exclusions=**/settings.py,**/migrations/** " +
-                                "-Dsonar.exclusions=**/settings.py "
-                        } 
+        steps { 
+            script { 
+                def scannerHome = tool 'MySonarScanner' 
+                withSonarQubeEnv('projet') { 
+                    withCredentials([string(credentialsId: 'sonarqube', variable: 'TOKEN')]) { 
+                        bat "\"${scannerHome}\\bin\\sonar-scanner.bat\" " +
+                            "-Dsonar.projectKey=node-projetcid " +
+                            "-Dsonar.sources=. " +
+                            "-Dsonar.login=%TOKEN% " +
+                            "-Dsonar.projectVersion=1.0.0 " +
+                            "-Dsonar.sourceEncoding=UTF-8 " +
+                            "-Dsonar.python.coverage.reportPaths=coverage.xml " +
+                            "-Dsonar.coverage.exclusions=**/settings.py,**/migrations/** " +
+                            "-Dsonar.exclusions=**/settings.py"
                     } 
                 } 
             } 
         } 
+    }
  } 
 } 
