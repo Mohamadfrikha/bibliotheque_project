@@ -51,6 +51,8 @@ def add_qty(request, livre_id):
     cart_item.quantity += 1
     cart_item.save()
     return redirect('cart:view_cart')
+
+@require_safe
 @login_required(login_url='cart:login')
 def sub_qty(request, livre_id):
     livre = get_object_or_404(Livre, id=livre_id)

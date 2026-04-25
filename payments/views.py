@@ -6,8 +6,10 @@ import stripe
 from django.shortcuts import render
 from cart.models import CartItem
 stripe.api_key = settings.STRIPE_SECRET_KEY
-
+from django.views.decorators.http import require_safe
 from django.contrib.auth.decorators import login_required
+
+@require_safe
 def create_checkout_session(request):
     cart_items = get_cart_items(request)
     line_items = []
@@ -46,10 +48,14 @@ def get_cart_items(request):
         "quantity": cart.quantity,
         })
     return cart_items
+
+@require_safe
 @login_required(login_url='cart:login')
 def success(request):
 # marquer le panier comme payé
     CartItem.objects.filter(user=request.user,status=False).update(status=True)
     return render(request, "payments/success.html")
+
+@require_safe
 def cancel(request):
     return render(request, "payments/cancel.html")
