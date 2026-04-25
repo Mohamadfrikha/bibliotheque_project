@@ -5,14 +5,6 @@ from django.urls import reverse
 
 class PaymentsTests(TestCase):
 
-    def setUp(self):
-        # نعمل user ونعدّيه login
-        self.user = User.objects.create_user(
-            username="test",
-            password="123456"
-        )
-        self.client.login(username="test", password="123456")
-
     def test_success_page(self):
         response = self.client.get(reverse('payments:success'))
         self.assertEqual(response.status_code, 200)
