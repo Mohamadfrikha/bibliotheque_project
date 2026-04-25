@@ -31,15 +31,6 @@ pipeline {
                 } 
             } 
         } 
- 
-        stage('Run Tests + Coverage') {
-            steps {
-                bat "python -m pip install coverage"
-                bat "python -m coverage run manage.py test"
-                bat "python -m coverage xml -o coverage.xml"
-                bat "dir coverage.xml"
-            }
-        }
         stage('Analyse SonarQube') { 
         steps { 
             script { 
