@@ -8,8 +8,8 @@ class PaymentsTests(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(
-            username="test",
-            password="123456"
+            username=config('TEST_USERNAME'),
+            password=config('TEST_PASSWORD')
         )
         self.client.login(username=config('TEST_USERNAME'), password=config('TEST_PASSWORD'))
     def test_success_page(self):
