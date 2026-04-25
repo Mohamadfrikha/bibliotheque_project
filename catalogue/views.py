@@ -4,6 +4,8 @@ from django.db.models import Count, Sum,Q
 from django.core.paginator import Paginator
 # Create your views here.
 from .models import Livre,Catalogue
+from django.views.decorators.http import require_safe
+@require_safe
 def accueil(request):
     nouveautes = Livre.objects.all()[:5]
     # Catégories avec compteur de livres
@@ -22,6 +24,7 @@ def accueil(request):
     'stats': stats,
     }
     return render(request, 'catalogue/accueil.html', context)
+@require_safe
 def catalogue(request):
     livres = Livre.objects.select_related('categorie').all()
     # Tri
@@ -48,6 +51,7 @@ def catalogue(request):
     }
     return render(request, 'catalogue/catalogue.html', context)
 # Détail d'un livre
+@require_safe
 def livre_detail(request, pk):
     livre = get_object_or_404(Livre, pk=pk)
     
@@ -57,6 +61,7 @@ def livre_detail(request, pk):
     return render(request, 'catalogue/livre_detail.html', context)
 
 # Recherche avancée
+@require_safe
 def recherche(request):
     """
     Recherche avancée avec :
