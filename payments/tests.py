@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+from decouple import config
 class PaymentsTests(TestCase):
 
     def setUp(self):
@@ -10,7 +11,7 @@ class PaymentsTests(TestCase):
             username="test",
             password="123456"
         )
-        self.client.login(username="test", password="123456")
+        self.client.login(username=config('TEST_USERNAME'), password=config('TEST_PASSWORD'))
     def test_success_page(self):
         response = self.client.get(reverse('payments:success'))
         self.assertEqual(response.status_code, 200)
