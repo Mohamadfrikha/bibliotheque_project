@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 #On transforme ce chemin __file__ ->C:\Users\LENOVO\Desktop\Atelier_django\bibliotheque_project\bibliotheque_project\settings.py en objet Path
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-8xxkkmum($utnja6lkzhdmux8f#ayj7q4(6@!oiiblgd#x($!*'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -128,8 +129,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL='/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'couvertures')
 
-STRIPE_SECRET_KEY ="sk_test_51T6SO9CA4xZUUkJONvXVjaGx1XMZZCgOudkWoahWNrgl1ci9oPIKgeYUKf88hXjGTqPEt6wOzBAWu6kkYb1OllYJ00i8kcfUnK"
-STRIPE_PUBLISHABLE_KEY ="pk_test_51T6SO9CA4xZUUkJO6FR6szpg0n6O9KhSnNl2Gxbxb55DoYHgSiCXd9TvaLxU5ewOySu3FdnuYAmjjjsTOhtUKZVx00WWZWTFwz"
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY')
 
 
 LOGIN_URL = 'cart:login'

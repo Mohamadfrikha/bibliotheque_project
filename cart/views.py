@@ -6,10 +6,12 @@ from catalogue.models import Livre
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-
+from django.views.decorators.http import require_safe
+@require_safe  # N'accepte que GET et HEAD (méthodes sûres)
 def product_list(request):
     livres = Livre.objects.all()
     return render(request, 'cart/browsing.html', {'livres': livres})
+@require_safe
 @login_required(login_url='cart:login')
 def view_cart(request):
     cart_items = CartItem.objects.filter(user=request.user, status=False)
