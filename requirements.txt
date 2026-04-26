@@ -1,0 +1,4 @@
+django
+decouple
+psycopg2-binary
+stripe
