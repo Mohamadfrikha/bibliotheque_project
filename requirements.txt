@@ -1,4 +1,6 @@
 django
-decouple
+python-decouple
 psycopg2-binary
 stripe
+httpx
+Pillow
