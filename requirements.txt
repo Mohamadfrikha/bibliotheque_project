@@ -5,3 +5,4 @@ stripe
 httpx
 Pillow
 gunicorn
+whitenoise
