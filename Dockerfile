@@ -10,6 +10,7 @@ ENV SECRET_KEY="build-time-dummy-key" \
     POSTGRES_HOST="postgres-service" \
     STRIPE_SECRET_KEY="dummy" \
     STRIPE_PUBLISHABLE_KEY="dummy"
+
 RUN python manage.py collectstatic --noinput
 EXPOSE 8000
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "bibliotheque_project.wsgi:application"]
