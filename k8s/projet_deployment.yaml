@@ -18,11 +18,38 @@ spec:
           ports:
             - containerPort: 80
           env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: django-secrets
+                  key: SECRET_KEY
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: django-secrets
+                  key: STRIPE_SECRET_KEY
+            - name: STRIPE_PUBLISHABLE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: django-secrets
+                  key: STRIPE_PUBLISHABLE_KEY
             - name: POSTGRES_USER
-              value: "postgres"
+              valueFrom:
+                secretKeyRef:
+                  name: django-secrets
+                  key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
-              value: "postgres"
-            - name: POSTGRES_DB
-              value: "postgres"
+              valueFrom:
+                secretKeyRef:
+                  name: django-secrets
+                  key: POSTGRES_PASSWORD
             - name: POSTGRES_HOST
-              value: "db"
+              valueFrom:
+                secretKeyRef:
+                  name: django-secrets
+                  key: POSTGRES_HOST
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: django-secrets
+                  key: POSTGRES_DB
