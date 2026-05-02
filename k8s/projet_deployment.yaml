@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mon-appli
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mon-appli
+  template:
+    metadata:
+      labels:
+        app: mon-appli
+    spec:
+      containers:
+        - name: monconteneur
+          image: mohamedfrikha65/mon-image:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+            - name: POSTGRES_DB
+              value: "postgres"
+            - name: POSTGRES_HOST
+              value: "db"
